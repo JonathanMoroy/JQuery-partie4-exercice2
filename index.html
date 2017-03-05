@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+  <script src="jquery-2.2.4.js"></script>
+  <meta charset="utf-8">
+  <title>Exercice 2</title>
+</head>
+<body>
+  <!-- Ajout d'un formulaire contenant 2 input et 2 radio ainsi qu'un bouton pour valider et un p pour afficher le résultat -->
+  <form>
+    <fieldset>
+      <legend>Merci de renseigner les champs ci-dessous</legend>
+      <label for="salary">Votre salaire: </label><input type="number" name="salary" id="salary" step="0.01" min="0" value="" placeholder="Votre salaire"><br>
+      <label for="child">Le nombre d'enfant à charge: </label><input type="number" step="1" min="0" name="child" id="child" value="" placeholder="Nombre d'enfant"><br>
+      <label for="gender"><br>Votre sexe: </label>
+      <ul>
+        <li><input type="radio" class="gender" name="gender" value="1">Mâle</li>
+        <li><input type="radio" class="gender" name="gender" value="2">Femelle</li>
+      </ul>
+    </fieldset>
+  </form>
+  <button type="button" name="button" id="validate">Validez</button>
+  <p id="result">Votre salaire, frais déduits est de: </p>
+  <script>
+  // Fonction ready
+  $(function() {
+    // Ajout d'un blur à l'input child pour alerté l'user d'un chiffre trop grand ou d'une décimale
+    $('#child').blur(function() {
+      if ($('#child').val() > 10) {
+        alert('Attention, vous venez de mettre un nombre d\'enfants supérieur à 10, si c\'est une erreur veuillez corriger.');
+      } else if ($('#child').val() % 1 !== 0) {
+        alert('Attention, vous venez de mettre un nombre décimale pour le nombre d\'enfant à charge. Veuillez corriger.')
+      }
+    });
+    // Ajout d'un click au bouton, on récupére toutes les valeurs on pose les conditions pour calculer le salaire final
+    $('#validate').click(function() {
+      var salary = $('#salary').val();
+      var child = $('#child').val();
+      var gender = $('.gender:checked').val();
+      var taxes = 0.70;
+      // Début de mes conditions
+      if (!$.isNumeric(salary) || !$.isNumeric(child) || child < 0 || child % 1 !== 0 || salary <= 0 || gender == 'undefined') {
+        alert('Attention, un des champs n\'est pas correctement rempli. Merci de veiller à: Mettre des nombres positifs (ou zéro si aucun enfant à charge) avec les décimales séparées des entiers par une virgule et non un point. N\'oubliez pas de selectionner un sexe.');
+      } else if (gender == 2) {
+        taxes += 0.02;
+      }
+      // ---------------- Je sépare et ajoute des if seule pour que les conditions s'ajoute bien si plusieurs sont bonnes et incrémante taxes
+      if (child == 3) {
+        taxes += 0.01;
+      }
+      // ---------------- Je sépare et ajoute des if seule pour que les conditions s'ajoute bien si plusieurs sont bonnes et incrémante taxes
+      if (child == 4) {
+        taxes += 0.02;
+      }
+      // On vide le p pour le remplir par le nouveau résultat
+      $('#result').empty();
+      var result = 'Votre salaire, frais déduits est de: '+salary * taxes+' €';
+      return $('#result').append(result);
+    }); // ~ Validate-Click
+  }); // ~ Ready
+  </script>
+</body>
+</html>
